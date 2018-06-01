@@ -15,15 +15,29 @@ public class Student {
 
     private String name;
 
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+
+    @ElementCollection
+    @CollectionTable(name = "Phone")
+    private List<String> phoneNumbers = new ArrayList<>();
 
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
+
+    @Transient
     private long age;
 
     @OneToOne
     private Address address;
+
+
+    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    private Klass klass;
 
     public Student() {
     }
@@ -36,9 +50,11 @@ public class Student {
                 / (60L * 60L * 1000L * 24L * 365L);
     }
 
-    public Student(String name, String email, Date dateOfBirth, Address address) {
+    public Student(String name, String email, Date dateOfBirth, Address address, String phoneNumber) {
         this(name, email, dateOfBirth);
         this.address = address;
+        this.phoneNumbers.add(phoneNumber);
+
     }
 
     public long getId() {
@@ -83,6 +99,15 @@ public class Student {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+
+    public Klass getKlass() {
+        return klass;
+    }
+
+    public void setKlass(Klass klass) {
+        this.klass = klass;
     }
 
     @Override
